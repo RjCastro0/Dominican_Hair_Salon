@@ -1,0 +1,12 @@
+﻿@model Dominican_Hair_Salon.Models.Venta
+
+<form asp-action="Create" asp-controller="Venta">
+    <div class="form-group">
+        <label asp-for="ServicioId" class="control-label"></label>
+        <select asp-for="ServicioId" class="form-control" asp-items="@(ViewBag.ServicioItems as List<SelectListItem>)"></select>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>

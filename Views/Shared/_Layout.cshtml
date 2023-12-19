@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Identity;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Lizbeth_Salon</title>
+
+    <!-- Estilos de Bootstrap -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Estilos de Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Otros estilos -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Lizbeth_Salon.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar-fixed">
+            <div class="nav-wrapper">
+                <a  class="brand-logo">Lizbeth Salon</a>
+                <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <li><a href="@Url.Action("Index", "RegistroDeVentas")">Registro De Venta</a></li>
+                        <li><a href="@Url.Action("Index", "Inventarios")">Inventario</a></li>
+                        <li><a href="@Url.Action("Index", "Sucursals")">Sucursales</a></li>
+                        <li><a href="@Url.Action("Index", "Usuarios")">Usuarios</a></li>
+                    }
+                    @if (User.IsInRole("Secretario"))
+                    {
+                        <li><a href="@Url.Action("Index", "TicketDeVenta")">Ticket de Venta</a></li>
+                        <li><a href="@Url.Action("Index", "Inventarios")">Inventario</a></li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+   
+
+    <!-- Scripts de jQuery, Bootstrap y Materialize -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- Script personalizado del sitio -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Sección de scripts opcional -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
