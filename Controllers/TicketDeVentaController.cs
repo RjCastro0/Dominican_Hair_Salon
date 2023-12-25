@@ -60,7 +60,7 @@ namespace Dominican_Hair_Salon.Controllers
         public async Task<IActionResult> Create([Bind("TicketId,SurcursalId,Fecha,Empleada,Precio,ClienteNombre")] TicketDeVenta ticketDeVenta)
         {
             ticketDeVenta.Fecha = DateTime.Now;
-           
+
             _context.Add(ticketDeVenta);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -156,14 +156,14 @@ namespace Dominican_Hair_Salon.Controllers
             {
                 _context.TicketDeVenta.Remove(ticketDeVenta);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TicketDeVentaExists(int id)
         {
-          return (_context.TicketDeVenta?.Any(e => e.TicketId == id)).GetValueOrDefault();
+            return (_context.TicketDeVenta?.Any(e => e.TicketId == id)).GetValueOrDefault();
         }
 
         [HttpPost]

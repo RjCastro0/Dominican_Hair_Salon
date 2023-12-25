@@ -3,7 +3,7 @@
 <form asp-action="Create" asp-controller="Venta">
     <div class="form-group">
         <label asp-for="ServicioId" class="control-label"></label>
-        <select asp-for="ServicioId" class="form-control" asp-items="@(ViewBag.ServicioItems as List<SelectListItem>)"></select>
+        <select asp-for="ServicioId" class="form-control" asp-items="@ViewBag.ServicioItems"></select>
     </div>
 
     <div class="form-group">

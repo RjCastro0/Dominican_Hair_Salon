@@ -179,20 +179,19 @@ public partial class HairSalonContext : DbContext
 
         modelBuilder.Entity<Venta>(entity =>
         {
-            entity.HasKey(e => e.TicketId);
+            entity.HasKey(e => e.VentaId);
 
-            entity.Property(e => e.TicketId)
-                .ValueGeneratedNever()
-                .HasColumnName("TicketID");
+            entity.Property(e => e.VentaId).HasColumnName("VentaID");
             entity.Property(e => e.ServicioId).HasColumnName("Servicio_ID");
+            entity.Property(e => e.TicketId).HasColumnName("TicketID");
 
             entity.HasOne(d => d.Servicio).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.ServicioId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TicketDetails_Menu");
 
-            entity.HasOne(d => d.Ticket).WithOne(p => p.Venta)
-                .HasForeignKey<Venta>(d => d.TicketId)
+            entity.HasOne(d => d.Ticket).WithMany(p => p.Venta)
+                .HasForeignKey(d => d.TicketId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Venta_Ticket_De_Venta");
         });

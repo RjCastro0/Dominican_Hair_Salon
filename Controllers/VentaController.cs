@@ -33,32 +33,23 @@ namespace Dominican_Hair_Salon.Controllers
                 return NotFound();
             }
 
-            var ventum = await _context.Venta
+            var venta = await _context.Venta
                 .Include(v => v.Servicio)
                 .Include(v => v.Ticket)
-                .FirstOrDefaultAsync(m => m.TicketId == id);
-            if (ventum == null)
+                .FirstOrDefaultAsync(m => m.VentaId == id);
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return View(ventum);
+            return View(venta);
         }
 
         // GET: Venta/Create
         public IActionResult Create()
         {
-            // ... tu lógica para obtener opciones de servicio, por ejemplo:
-            var servicios = _context.Menus.ToList();
-
-            // Mapea los servicios a SelectListItem
-            var servicioItems = servicios.Select(s => new SelectListItem { Value = s.ServicioId.ToString(), Text = s.NombreServicio }).ToList();
-
-            // Agrega un elemento por defecto si es necesario
-            servicioItems.Insert(0, new SelectListItem { Value = "", Text = "Seleccione un servicio" });
-
-            ViewBag.ServicioItems = servicioItems;
-
+            ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "ServicioId");
+            ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId");
             return View();
         }
 
@@ -67,24 +58,17 @@ namespace Dominican_Hair_Salon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,ServicioId")] Venta ventum)
+        public async Task<IActionResult> Create([Bind("VentaId,TicketId,ServicioId")] Venta venta)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ventum);
+                _context.Add(venta);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            // Si hay un error en el modelo, vuelve a cargar las opciones para el dropdown
-            var servicios = _context.Menus.ToList();
-            var servicioItems = servicios.Select(s => new SelectListItem { Value = s.ServicioId.ToString(), Text = s.NombreServicio }).ToList();
-            servicioItems.Insert(0, new SelectListItem { Value = "", Text = "Seleccione un servicio" });
-            ViewBag.ServicioItems = servicioItems;
-
-            // También puedes volver a cargar las opciones para TicketId si es necesario
-
-            return View(ventum);
+            ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "ServicioId", venta.ServicioId);
+            ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId", venta.TicketId);
+            return View(venta);
         }
 
         // GET: Venta/Edit/5
@@ -95,14 +79,14 @@ namespace Dominican_Hair_Salon.Controllers
                 return NotFound();
             }
 
-            var ventum = await _context.Venta.FindAsync(id);
-            if (ventum == null)
+            var venta = await _context.Venta.FindAsync(id);
+            if (venta == null)
             {
                 return NotFound();
             }
-            ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "NombreServicio", ventum.ServicioId);
-            ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId", ventum.TicketId);
-            return View(ventum);
+            ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "ServicioId", venta.ServicioId);
+            ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId", venta.TicketId);
+            return View(venta);
         }
 
         // POST: Venta/Edit/5
@@ -110,9 +94,9 @@ namespace Dominican_Hair_Salon.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TicketId,ServicioId")] Venta ventum)
+        public async Task<IActionResult> Edit(int id, [Bind("VentaId,TicketId,ServicioId")] Venta venta)
         {
-            if (id != ventum.TicketId)
+            if (id != venta.VentaId)
             {
                 return NotFound();
             }
@@ -121,12 +105,12 @@ namespace Dominican_Hair_Salon.Controllers
             {
                 try
                 {
-                    _context.Update(ventum);
+                    _context.Update(venta);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VentumExists(ventum.TicketId))
+                    if (!VentaExists(venta.VentaId))
                     {
                         return NotFound();
                     }
@@ -137,9 +121,9 @@ namespace Dominican_Hair_Salon.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "NombreServicio", ventum.ServicioId);
-            ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId", ventum.TicketId);
-            return View(ventum);
+            ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "ServicioId", venta.ServicioId);
+            ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId", venta.TicketId);
+            return View(venta);
         }
 
         // GET: Venta/Delete/5
@@ -150,16 +134,16 @@ namespace Dominican_Hair_Salon.Controllers
                 return NotFound();
             }
 
-            var ventum = await _context.Venta
+            var venta = await _context.Venta
                 .Include(v => v.Servicio)
                 .Include(v => v.Ticket)
-                .FirstOrDefaultAsync(m => m.TicketId == id);
-            if (ventum == null)
+                .FirstOrDefaultAsync(m => m.VentaId == id);
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return View(ventum);
+            return View(venta);
         }
 
         // POST: Venta/Delete/5
@@ -171,19 +155,19 @@ namespace Dominican_Hair_Salon.Controllers
             {
                 return Problem("Entity set 'HairSalonContext.Venta'  is null.");
             }
-            var ventum = await _context.Venta.FindAsync(id);
-            if (ventum != null)
+            var venta = await _context.Venta.FindAsync(id);
+            if (venta != null)
             {
-                _context.Venta.Remove(ventum);
+                _context.Venta.Remove(venta);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VentumExists(int id)
+        private bool VentaExists(int id)
         {
-          return (_context.Venta?.Any(e => e.TicketId == id)).GetValueOrDefault();
+          return (_context.Venta?.Any(e => e.VentaId == id)).GetValueOrDefault();
         }
     }
 }

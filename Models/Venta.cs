@@ -5,6 +5,8 @@ namespace Dominican_Hair_Salon.Models;
 
 public partial class Venta
 {
+    public int VentaId { get; set; }
+
     public int TicketId { get; set; }
 
     public int ServicioId { get; set; }
