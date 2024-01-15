@@ -60,14 +60,12 @@ namespace Dominican_Hair_Salon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("VentaId,TicketId,ServicioId")] Venta venta)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(venta);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "ServicioId", venta.ServicioId);
-            ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId", venta.TicketId);
+
+            _context.Add(venta);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        
+            
             return View(venta);
         }
 
@@ -169,5 +167,40 @@ namespace Dominican_Hair_Salon.Controllers
         {
           return (_context.Venta?.Any(e => e.VentaId == id)).GetValueOrDefault();
         }
+
+        [HttpPost]
+        public JsonResult InsertVentas(List<Venta> ventas)
+        {
+            try
+            {
+                // Truncate Table para eliminar todos los registros antiguos
+                _context.Database.ExecuteSqlRaw("TRUNCATE TABLE [Ventas]");
+
+                // Verifica si la lista es nula y asigna una lista vacía si es necesario
+                if (ventas == null)
+                {
+                    ventas = new List<Venta>();
+                }
+
+                // Agrega cada venta a la base de datos
+                foreach (Venta venta in ventas)
+                {
+                    ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "ServicioId", venta.ServicioId);
+                    ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId", venta.TicketId);
+                    _context.Venta.Add(venta);
+                }
+
+                // Guarda los cambios en la base de datos
+                int insertedRecords = _context.SaveChanges();
+
+                return Json(insertedRecords);
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier excepción que pueda ocurrir durante la operación
+                return Json(ex.Message);
+            }
+        }
     }
 }
+

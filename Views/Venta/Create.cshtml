@@ -10,27 +10,61 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="ventaForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TicketId" class="control-label"></label>
-                <select asp-for="TicketId" class ="form-control" asp-items="ViewBag.TicketId"></select>
+
+            <div id="ventasContainer">
+                <!-- Contenedor para las ventas dinámicas -->
             </div>
+
             <div class="form-group">
-                <label asp-for="ServicioId" class="control-label"></label>
-                <select asp-for="ServicioId" class ="form-control" asp-items="ViewBag.ServicioId"></select>
+                <input type="button" value="Agregar Venta" class="btn btn-secondary" onclick="addVenta()" />
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Crear Ventas" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-controller="TicketDeVenta" asp-action="Index">Volver</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        var ventaCount = 0;
+
+        function addVenta() {
+            // Incrementar el índice de la venta
+            var index = ventaCount++;
+
+            // Crear el HTML para una nueva venta
+            var ventaHtml = `<div class="venta" data-index="${index}">
+                                <div class="form-group">
+                                    <label asp-for="Ventas[${index}].TicketId" class="control-label"></label>
+                                    <select asp-for="Ventas[${index}].TicketId" class="form-control select2" asp-items="ViewBag.TicketId"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Ventas[${index}].ServicioId" class="control-label"></label>
+                                    <select asp-for="Ventas[${index}].ServicioId" class="form-control select2" asp-items="ViewBag.ServicioId"></select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-danger" onclick="removeVenta(${index})">Eliminar Venta</button>
+                                </div>
+                            </div>`;
+
+            // Agregar la venta al contenedor
+            $("#ventasContainer").append(ventaHtml);
+
+            // Inicializar select2 para los nuevos elementos
+            $(".select2").select2();
+        }
+
+        function removeVenta(index) {
+            // Remover la venta del DOM
+            $(`.venta[data-index=${index}]`).remove();
+        }
+    </script>
 }

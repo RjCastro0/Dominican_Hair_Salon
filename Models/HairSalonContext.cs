@@ -75,19 +75,12 @@ public partial class HairSalonContext : DbContext
 
         modelBuilder.Entity<RegistroDeVenta>(entity =>
         {
-            entity.HasKey(e => e.VentaId);
+            entity.HasKey(e => e.Fecha).HasName("PK_Registro_de_Ventas_1");
 
             entity.ToTable("Registro_de_Ventas");
 
-            entity.Property(e => e.VentaId).HasColumnName("Venta_ID");
             entity.Property(e => e.Fecha).HasColumnType("date");
-            entity.Property(e => e.TicketId).HasColumnName("Ticket_ID");
             entity.Property(e => e.Total).HasColumnType("numeric(7, 2)");
-
-            entity.HasOne(d => d.Ticket).WithMany(p => p.RegistroDeVenta)
-                .HasForeignKey(d => d.TicketId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Registro_de_Ventas_Ticket_De_Venta");
         });
 
         modelBuilder.Entity<Role>(entity =>
