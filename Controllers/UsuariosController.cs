@@ -60,12 +60,11 @@ namespace Dominican_Hair_Salon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserId,UserName,Password,Sucursal,Status,Role")] Usuario usuario)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            
+            _context.Add(usuario);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            
             ViewData["Role"] = new SelectList(_context.Roles, "RoleName", "RoleName", usuario.Role);
             ViewData["Sucursal"] = new SelectList(_context.Sucursals, "SucursalesId", "SucursalesId", usuario.Sucursal);
             return View(usuario);
@@ -101,26 +100,26 @@ namespace Dominican_Hair_Salon.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsuarioExists(usuario.UserId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(usuario);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuarioExists(usuario.UserId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+
+                
+            }
+           
             ViewData["Role"] = new SelectList(_context.Roles, "RoleName", "RoleName", usuario.Role);
             ViewData["Sucursal"] = new SelectList(_context.Sucursals, "SucursalesId", "SucursalesId", usuario.Sucursal);
             return View(usuario);

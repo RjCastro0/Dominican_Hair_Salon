@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dominican_Hair_Salon.Models;
 
@@ -9,7 +10,8 @@ public partial class TicketDeVenta
 
     public int SurcursalId { get; set; }
 
-    public DateTime? Fecha { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime Fecha { get; set; }
 
     public string Empleada { get; set; } = null!;
 

@@ -1,31 +1,31 @@
 ﻿@model IEnumerable<Dominican_Hair_Salon.Models.Usuario>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Usuarios";
 }
 
-<h1>Index</h1>
+<h1>Usuarios</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Crear Usuario</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                Nombre de Usuario
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+                Contraseña
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                Estado
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RoleNavigation)
+                Rol
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SucursalNavigation)
+                Sucursal
             </th>
             <th></th>
         </tr>
@@ -39,9 +39,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Password)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
+                @if (int.Parse(item.Status) == 1)
+                {
+                    <td>
+                        Activo
+                    </td>
+                }
+                else
+                {
+                    <td>Inactivo</td>
+                }
             <td>
                 @Html.DisplayFor(modelItem => item.RoleNavigation.RoleName)
             </td>
@@ -49,11 +56,16 @@
                 @Html.DisplayFor(modelItem => item.SucursalNavigation.SucursalesId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.UserId">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@item.UserId">Eliminar</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        <a class="btn waves-effect waves-light" asp-controller="Login" asp-action="CerrarSesion">Finalizar Dia</a>
+    </div>
+</footer>

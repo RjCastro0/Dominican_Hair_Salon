@@ -18,12 +18,6 @@ namespace Dominican_Hair_Salon.Controllers
             _context = context;
         }
 
-        // GET: Venta
-        public async Task<IActionResult> Index()
-        {
-            var hairSalonContext = _context.Venta.Include(v => v.Servicio).Include(v => v.Ticket);
-            return View(await hairSalonContext.ToListAsync());
-        }
 
         // GET: Venta/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -46,28 +40,19 @@ namespace Dominican_Hair_Salon.Controllers
         }
 
         // GET: Venta/Create
+
         public IActionResult Create()
         {
-            ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "ServicioId");
-            ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId");
+            ViewBag.ServicioId = new SelectList(_context.Menus, "ServicioId", "ServicioId");
+            ViewBag.TicketId = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId");
             return View();
         }
+
 
         // POST: Venta/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VentaId,TicketId,ServicioId")] Venta venta)
-        {
-
-            _context.Add(venta);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         
-            
-            return View(venta);
-        }
 
         // GET: Venta/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -171,22 +156,15 @@ namespace Dominican_Hair_Salon.Controllers
         [HttpPost]
         public JsonResult InsertVentas(List<Venta> ventas)
         {
+            
             try
             {
-                // Truncate Table para eliminar todos los registros antiguos
-                _context.Database.ExecuteSqlRaw("TRUNCATE TABLE [Ventas]");
-
-                // Verifica si la lista es nula y asigna una lista vacía si es necesario
-                if (ventas == null)
-                {
-                    ventas = new List<Venta>();
-                }
+                
 
                 // Agrega cada venta a la base de datos
                 foreach (Venta venta in ventas)
                 {
-                    ViewData["ServicioId"] = new SelectList(_context.Menus, "ServicioId", "ServicioId", venta.ServicioId);
-                    ViewData["TicketId"] = new SelectList(_context.TicketDeVenta, "TicketId", "TicketId", venta.TicketId);
+                    
                     _context.Venta.Add(venta);
                 }
 

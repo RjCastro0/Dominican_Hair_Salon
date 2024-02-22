@@ -47,7 +47,7 @@ namespace Dominican_Hair_Salon.Controllers
         // GET: Inventarios/Create
         public IActionResult Create()
         {
-            ViewData["SucursalId"] = new SelectList(_context.Sucursals, "SucursalesId", "SucursalesId");
+            ViewData["SucursalId"] = new SelectList(_context.Sucursals, "SucursalesId", "Nombre");
             return View();
         }
 
@@ -58,12 +58,10 @@ namespace Dominican_Hair_Salon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SucursalId,InventarioId,ProductName,Cantidad,Status")] Inventario inventario)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(inventario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            _context.Add(inventario);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
             ViewData["SucursalId"] = new SelectList(_context.Sucursals, "SucursalesId", "SucursalesId", inventario.SucursalId);
             return View(inventario);
         }
@@ -81,7 +79,7 @@ namespace Dominican_Hair_Salon.Controllers
             {
                 return NotFound();
             }
-            ViewData["SucursalId"] = new SelectList(_context.Sucursals, "SucursalesId", "SucursalesId", inventario.SucursalId);
+            ViewData["SucursalId"] = new SelectList(_context.Sucursals, "SucursalesId", "Nombre", inventario.SucursalId);
             return View(inventario);
         }
 
@@ -117,7 +115,7 @@ namespace Dominican_Hair_Salon.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SucursalId"] = new SelectList(_context.Sucursals, "SucursalesId", "SucursalesId", inventario.SucursalId);
+            ViewData["SucursalId"] = new SelectList(_context.Sucursals, "SucursalesId", "Nombre", inventario.SucursalId);
             return View(inventario);
         }
 

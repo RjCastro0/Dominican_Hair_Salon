@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Dominican_Hair_Salon.Models.TicketDeVenta>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Ticket de Venta</h1>
+
+@if (User.IsInRole("Secretario"))
+{
+    <p>
+        <a asp-action="Create">Crear Ticket</a>
+    </p>
+}
+
+<table id="ticketTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                Fechas
+            </th>
+            <th>Día de la Semana</th>
+            <th>
+                Estilista
+            </th>
+            <th>
+                Valor
+            </th>
+            <th>
+                Nombre del Cliente
+            </th>
+            <th>
+                Sucursal
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Fecha.DayOfWeek)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Empleada)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClienteNombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surcursal.SucursalesId)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.TicketId">Detalles</a>                  
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        <a class="btn waves-effect waves-light" asp-controller="Login" asp-action="CerrarSesion">Finalizar Dia</a>
+    </div>
+</footer>
+
+
+<script>
+    $(document).ready(function () {
+        $('#ticketTable').DataTable();
+        $('#sumTable').DataTable();
+    });
+</script>

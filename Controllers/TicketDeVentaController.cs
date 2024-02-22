@@ -19,11 +19,29 @@ namespace Dominican_Hair_Salon.Controllers
         }
 
         // GET: TicketDeVenta
-        public async Task<IActionResult> Index()
+       public async Task<IActionResult> Index()
         {
-            var hairSalonContext = _context.TicketDeVenta.Include(t => t.Surcursal);
+            var today = DateTime.Today;
+
+            var hairSalonContext = _context.TicketDeVenta
+                .Include(t => t.Surcursal)
+                .Where(t => t.Fecha.Date == today).OrderBy(s => s.Fecha);
+
+            var sumOfPricesByEmployee = await _context.TicketDeVenta
+                .Where(t => t.Fecha.Date == today)
+                .GroupBy(t => t.Empleada)
+                .Select(g => new
+                {
+                    EmployeeName = g.Key,
+                    TotalPrice = g.Sum(t => t.Precio)
+                })
+                .ToListAsync();
+
+            ViewBag.SumOfPricesByEmployee = sumOfPricesByEmployee;
+
             return View(await hairSalonContext.ToListAsync());
-        }
+       }
+
 
         // GET: TicketDeVenta/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -161,10 +179,7 @@ namespace Dominican_Hair_Salon.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TicketDeVentaExists(int id)
-        {
-            return (_context.TicketDeVenta?.Any(e => e.TicketId == id)).GetValueOrDefault();
-        }
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -187,5 +202,44 @@ namespace Dominican_Hair_Salon.Controllers
             // con los mensajes de error
             return View(ticketDeVenta);
         }
+
+        private bool TicketDeVentaExists(int id)
+        {
+            return (_context.TicketDeVenta?.Any(e => e.TicketId == id)).GetValueOrDefault();
+        }
+
+        public async Task<IActionResult> IndexRegistroVenta()
+        {
+            var today = DateTime.Today;
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeek = startOfWeek.AddDays(6);
+
+            var salesByDayAndEmployee = await _context.TicketDeVenta
+                .Where(r => r.Fecha >= startOfWeek && r.Fecha <= endOfWeek)
+                .GroupBy(r => new
+                {
+                    Fecha = r.Fecha,
+                    Empleado = r.Empleada,
+                })
+                .Select(g => new
+                {
+                    g.Key.Fecha,
+                    g.Key.Empleado,
+                    TotalPrecio = g.Sum(t => t.Precio)
+                }).OrderBy(s => s.Fecha)
+                .ToListAsync();
+
+            return View(salesByDayAndEmployee);
+        }
+
+        public async Task<IActionResult> DetailRegistroDeVenta()
+        {
+            var hairSalonContext = _context.TicketDeVenta.Include(t => t.Surcursal);
+
+            return View(await hairSalonContext.ToListAsync());
+        }
+
+
+
     }
 }

@@ -19,8 +19,6 @@ public partial class HairSalonContext : DbContext
 
     public virtual DbSet<Menu> Menus { get; set; }
 
-    public virtual DbSet<RegistroDeVenta> RegistroDeVentas { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<Sucursal> Sucursals { get; set; }
@@ -71,16 +69,6 @@ public partial class HairSalonContext : DbContext
             entity.Property(e => e.Statuts)
                 .HasMaxLength(1)
                 .IsFixedLength();
-        });
-
-        modelBuilder.Entity<RegistroDeVenta>(entity =>
-        {
-            entity.HasKey(e => e.Fecha).HasName("PK_Registro_de_Ventas_1");
-
-            entity.ToTable("Registro_de_Ventas");
-
-            entity.Property(e => e.Fecha).HasColumnType("date");
-            entity.Property(e => e.Total).HasColumnType("numeric(7, 2)");
         });
 
         modelBuilder.Entity<Role>(entity =>

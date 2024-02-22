@@ -1,0 +1,48 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Registro de Ventas Semanales";
+}
+
+<h1>Total de Ventas Semanales</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Dia de la Semana</th>
+            <th>Empleado</th>
+            <th>Total Precio Diario</th>
+            <th>Ganancia propia</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var venta in Model)
+        {
+            <tr>
+                <td>@venta.Fecha.ToString("d")</td>
+                <td>@venta.Fecha.DayOfWeek</td>
+                <td>@venta.Empleado</td>
+                <td>@venta.TotalPrecio</td>
+                <td>@(venta.TotalPrecio * (decimal)0.6)</td>
+            </tr>
+        }
+    </tbody>
+    
+</table>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        <a class="btn waves-effect waves-light" asp-controller="Login" asp-action="CerrarSesion">Finalizar Dia</a>
+    </div>
+    <div class="container">
+        <a class="btn waves-effect waves-light" asp-controller="TicketDeVenta" asp-action="DetailRegistroDeVenta">Detalles</a>
+    </div>
+</footer>
+
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable();
+    });
+</script>

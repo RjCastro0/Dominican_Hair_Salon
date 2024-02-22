@@ -1,25 +1,22 @@
 ﻿@model IEnumerable<Dominican_Hair_Salon.Models.Inventario>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Inventario";
 }
 
-<h1>Index</h1>
+<h1>Inventario</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Añadir Producto</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductName)
+                Producto
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Cantidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Sucursal)
@@ -37,17 +34,19 @@
                 @Html.DisplayFor(modelItem => item.Cantidad)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @Html.DisplayFor(modelItem => item.Sucursal.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Sucursal.SucursalesId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.InventarioId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.InventarioId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.InventarioId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.InventarioId">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@item.InventarioId">Eliminar</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        <a class="btn waves-effect waves-light" asp-controller="Login" asp-action="CerrarSesion">Finalizar Dia</a>
+    </div>
+</footer>
